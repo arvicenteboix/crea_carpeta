@@ -1,0 +1,198 @@
+# auto-py-to-exe para compilar este script
+# Asegúrate de tener instaladas las librerías necesarias
+# pyinstaller --onefile --add-data "archivo.txt:." tu_script.py
+
+
+import os
+import tkinter as tk
+from tkinter import messagebox
+from docx import Document
+import shutil
+import os, sys
+import re
+
+# Función para crear carpeta y archivos docx
+def crear_proyecto():
+
+    val = on_focus_out(None)  # Validar el código al iniciar
+    if val == 0:
+        return
+
+    def obtener_ruta(relative_path):
+        """Devuelve ruta compatible en .exe o desarrollo"""
+        base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+        return os.path.join(base_path, relative_path)
+
+
+
+    codigo = entrada.get().upper()
+
+    nombre_asesor = asesor_var.get()
+    nombre_carpeta = f"{codigo}_{nombre_asesor}"
+
+    if not nombre_carpeta or nombre_carpeta == f"_{nombre_asesor}":
+        messagebox.showwarning("Advertencia", "Introduce un nombre para la carpeta.")
+        return
+
+    # Crear carpeta si no existe
+    try:
+        os.makedirs(nombre_carpeta, exist_ok=True)
+
+        archivos = [
+            ("PROPER_PONENTE", "Añadir todas las justificaciones como que ha entrgado el PROPER el PONENTE."),
+            ("descripción", "Esta es la DESCRIPCIÓN general del proyecto y sus objetivos.")
+        ]
+
+        for sufijo, texto in archivos:
+            nombre_archivo = f"{codigo}_{sufijo}.docx"
+            ruta = os.path.join(nombre_carpeta, nombre_archivo)
+
+            doc = Document()
+            doc.add_heading(f"{codigo} - {sufijo.capitalize()}", level=1)
+            doc.add_paragraph(texto)
+
+            doc.save(ruta)
+
+        # Copiar archivos adicionales
+        try:
+            archivos_a_copiar2 = [
+            "AutorizacionGrabacionYDifusion.pdf",
+            "AutorizacionUsoMaterialesAbierto.pdf",
+            "DATOS PONENTE_NOMBRE.pdf",
+            "FITXA ECONÒMICA.xlsx",
+            "README.txt",
+            "DESIGNA_PLANTILLA.docx",
+            "crea_designa.exe"
+            ]
+
+            for archivo in archivos_a_copiar2:
+                origen = obtener_ruta(archivo)
+                destino = os.path.join(nombre_carpeta, f"{codigo}_{archivo}")
+                if not os.path.exists(origen):
+                    messagebox.showwarning("Advertencia", f"No se encuentra el archivo: {archivo}")
+                    continue
+                shutil.copyfile(origen, destino)
+            
+            if es_no_funcionario_var.get():
+                archivo_no_funcionario = "Informe motivado de necesidad de ponente NO FUNCIONARIO CAST.docx"
+                origen = obtener_ruta(archivo_no_funcionario)
+                destino = os.path.join(nombre_carpeta, f"{codigo}_{archivo_no_funcionario}")
+
+            if contrato_menor.get():
+                archivos_contrato_menor = [
+                    "Modelo informe necesidad_VAL_V3.docx",
+                    "Modelo certificado conformidad contrato menor.docx"
+                ]
+                for archivo_contrato_menor in archivos_contrato_menor:
+                    origen = obtener_ruta(archivo_contrato_menor)
+                    destino = os.path.join(nombre_carpeta, f"{codigo}_{archivo_contrato_menor}")
+                    if not os.path.exists(origen):
+                        messagebox.showwarning("Advertencia", f"No se encuentra el archivo: {archivo_contrato_menor}")
+                        continue
+                    shutil.copyfile(origen, destino)
+
+                archivos_contrato_menor2 = [
+                    "INSTRUCCIONES FACTURACION FACE_2025_sdgfp.pdf",
+                    "Manual_detallado_FACe-Manual-Proveedores.pdf"
+                ]
+
+                for archivo_contrato_menor in archivos_contrato_menor2:
+                    origen = obtener_ruta(archivo_contrato_menor)
+                    destino = os.path.join(nombre_carpeta, f"{archivo_contrato_menor}")
+                    if not os.path.exists(origen):
+                        messagebox.showwarning("Advertencia", f"No se encuentra el archivo: {archivo_contrato_menor}")
+                        continue
+                    shutil.copyfile(origen, destino)
+
+            if not os.path.exists(origen):
+                messagebox.showwarning("Advertencia", f"No se encuentra el archivo: {archivo_no_funcionario}")
+            else:
+                shutil.copyfile(origen, destino)
+
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
+
+    # Crear subcarpeta y copiar archivos DOCX
+
+    try:
+        subcarpeta = os.path.join(nombre_carpeta, f"{codigo}-Tec")
+        os.makedirs(subcarpeta, exist_ok=True)
+
+        archivos_a_copiar = [
+            "CuadroTexto.docx",
+            "Evidencias.docx",
+            "FSE_Ficha_seguimiento.docx"
+        ]
+
+        for archivo in archivos_a_copiar:
+            origen = obtener_ruta(archivo)
+            destino = os.path.join(subcarpeta, f"{codigo}_{archivo}")
+            if not os.path.exists(origen):
+                messagebox.showwarning("Advertencia", f"No se encuentra el archivo: {archivo}")
+                continue
+            shutil.copyfile(origen, destino)
+        
+
+        # messagebox.showinfo("Éxito", f"Se crearon los archivos DOCX en la carpeta '{nombre_carpeta}'.")
+
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
+    
+    messagebox.showinfo("Éxito", f"Se ha creado la carpeta '{nombre_carpeta}'.")
+
+
+
+# Interfaz gráfica
+ventana = tk.Tk()
+ventana.title("Generador de Carpeta")
+ventana.geometry("350x320")
+ventana.configure(bg="#e9ecef")
+
+frame = tk.Frame(ventana, bg="#ffffff", bd=2, relief="groove")
+frame.place(relx=0.5, rely=0.5, anchor="center", width=300, height=280)
+es_no_funcionario_var = tk.BooleanVar()
+contrato_menor = tk.BooleanVar()
+
+etiqueta = tk.Label(frame, text="Asesor:", bg="#ffffff", font=("Arial", 11))
+etiqueta.pack(pady=(15, 5))
+
+asesores = ["ALFREDO", "GLORIA", "PACO", "VERA", "GEMMA", "CAMILO", "SANTIAGO", "ANNA", "LOURDES", "LORENA", "PATRICIA", "JOSE", "DAVID"]
+asesor_var = tk.StringVar(value=asesores[0])
+desplegable = tk.OptionMenu(frame, asesor_var, *asesores)
+desplegable.config(font=("Arial", 10), width=20, bg="#ffffff")
+desplegable.pack(pady=5)
+
+etiqueta = tk.Label(frame, text="Código del curso:", bg="#ffffff", font=("Arial", 11))
+etiqueta.pack(pady=(15, 5))
+
+def validar_codigo(codigo):
+    # Patrón: 2 dígitos, 2 letras, 2 dígitos, 2 letras, 3 dígitos (ej: 25fp45er345)
+    patron = r'^\d{2}[a-zA-Z]{2}\d{2}[a-zA-Z]{2}\d{3}$'
+    return re.match(patron, codigo) is not None
+
+def on_focus_out(event):
+    codigo = entrada.get()
+    if codigo and not validar_codigo(codigo):
+        messagebox.showwarning("Advertencia", "El código debe tener el formato de código Gesform")
+        entrada.focus_set()
+        return 0
+    return 1
+
+entrada = tk.Entry(frame, width=28, font=("Arial", 10), relief="solid", bd=1)
+entrada.pack(pady=5)
+# entrada.bind("<FocusOut>", on_focus_out)
+
+checkbox = tk.Checkbutton(frame, text="Es no funcionario", variable=es_no_funcionario_var, bg="#ffffff", font=("Arial", 10))
+checkbox.pack(pady=(5, 0))
+
+checkbox = tk.Checkbutton(frame, text="Contiene factura empresa materiales", variable=contrato_menor, bg="#ffffff", font=("Arial", 10))
+checkbox.pack(pady=(5, 0))
+
+boton = tk.Button(frame, text="Crear Carpeta", command=crear_proyecto, bg="#007bff", fg="white",
+                  font=("Arial", 10), relief="flat", padx=10, pady=5)
+boton.pack(pady=(10, 5))
+
+ventana.mainloop()
