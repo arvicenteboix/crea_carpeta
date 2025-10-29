@@ -10,6 +10,9 @@ from docx import Document
 import shutil
 import os, sys
 import re
+import requests
+
+version = "v1.0.3"
 
 # Función para crear carpeta y archivos docx
 def crear_proyecto():
@@ -61,7 +64,6 @@ def crear_proyecto():
             "DATOS PONENTE_NOMBRE.pdf",
             "FITXA ECONÒMICA.xlsx",
             "README.txt",
-            "DESIGNA_PLANTILLA.docx",
             "crea_designa.exe"
             ]
 
@@ -143,6 +145,62 @@ def crear_proyecto():
     
     messagebox.showinfo("Éxito", f"Se ha creado la carpeta '{nombre_carpeta}'.")
 
+def check_version():
+    import requests
+    import webbrowser
+    url = "https://api.github.com/repos/arvicenteboix/crea_carpeta/releases/latest"
+    response = requests.get(url)
+    if response.status_code != 200:
+        messagebox.showerror("Error", "No se pudo comprobar la versión más reciente.")
+        latest_release = version  # Asumir que es la versión actual si hay error
+    else:
+        latest_release = response.json()["tag_name"]
+    
+
+    if latest_release != version:
+        # Crear ventana personalizada con botón para abrir el enlace
+        def abrir_enlace():
+            webbrowser.open("https://github.com/arvicenteboix/crea_carpeta/releases")
+
+        ventana_actualizacion = tk.Toplevel()
+        ventana_actualizacion.title("Actualización disponible")
+        ventana_actualizacion.geometry("350x180")
+        ventana_actualizacion.resizable(False, False)
+        ventana_actualizacion.transient(ventana)  # La ventana de actualización está por encima de la principal
+        ventana_actualizacion.grab_set()  # Bloquea interacción con la ventana principal hasta cerrar
+        ventana_actualizacion.focus_set()
+ 
+        label = tk.Label(
+            ventana_actualizacion,
+            text=f"Hay una nueva versión disponible: {latest_release}. Tienes {version}.\n\nVisita el repositorio para descargarla.",
+            wraplength=320,
+            justify="left"
+        )
+        label.pack(pady=(20, 10))
+
+        boton_enlace = tk.Button(
+            ventana_actualizacion,
+            text="Abrir página de descargas",
+            command=abrir_enlace,
+            bg="#007bff",
+            fg="white",
+            font=("Arial", 10),
+            relief="flat",
+            padx=10,
+            pady=5
+        )
+        boton_enlace.pack(pady=(0, 15))
+
+        boton_cerrar = tk.Button(
+            ventana_actualizacion,
+            text="Cerrar",
+            command=ventana_actualizacion.destroy,
+            font=("Arial", 10),
+            relief="flat",
+            padx=10,
+            pady=5
+        )
+        boton_cerrar.pack()
 
 
 # Interfaz gráfica
@@ -150,6 +208,7 @@ ventana = tk.Tk()
 ventana.title("Generador de Carpeta")
 ventana.geometry("350x320")
 ventana.configure(bg="#e9ecef")
+
 
 frame = tk.Frame(ventana, bg="#ffffff", bd=2, relief="groove")
 frame.place(relx=0.5, rely=0.5, anchor="center", width=300, height=280)
@@ -195,4 +254,7 @@ boton = tk.Button(frame, text="Crear Carpeta", command=crear_proyecto, bg="#007b
                   font=("Arial", 10), relief="flat", padx=10, pady=5)
 boton.pack(pady=(10, 5))
 
+check_version()
+
 ventana.mainloop()
+
