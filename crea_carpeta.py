@@ -12,7 +12,7 @@ import os, sys
 import re
 import requests
 
-version = "v1.0.4"
+version = "v1.0.6"
 
 # Función para crear carpeta y archivos docx
 def crear_proyecto():
