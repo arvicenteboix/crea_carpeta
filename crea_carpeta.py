@@ -299,6 +299,9 @@ boton = tk.Button(frame, text="Crear Carpeta", command=crear_proyecto, bg="#007b
                   font=("Arial", 10), relief="flat", padx=10, pady=5)
 boton.pack(pady=(10, 5))
 
+label_version = tk.Label(ventana, text=version, bg="#e9ecef", font=("Arial", 8), fg="#6c757d")
+label_version.place(relx=1.0, rely=1.0, anchor="se", x=-1, y=-1)
+
 check_version()
 
 ventana.mainloop()
