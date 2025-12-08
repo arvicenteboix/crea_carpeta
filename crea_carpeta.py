@@ -12,7 +12,7 @@ import os, sys
 import re
 import requests
 
-version = "v1.0.9"
+version = "v1.0.10"
 
 # Función para crear carpeta y archivos docx
 def crear_proyecto():
@@ -247,9 +247,14 @@ def check_version():
         )
         boton_cerrar.pack()
 
-
+def resource_path(relative_path):
+        if hasattr(sys, '_MEIPASS'):
+            return os.path.join(sys._MEIPASS, relative_path)
+        return os.path.join(os.path.abspath('.'), relative_path)
 # Interfaz gráfica
 ventana = tk.Tk()
+
+ventana.iconbitmap(resource_path("icon.ico"))
 ventana.title("Generador de Carpeta")
 ventana.geometry("350x320")
 ventana.configure(bg="#e9ecef")

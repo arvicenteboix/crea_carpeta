@@ -5,7 +5,7 @@ a = Analysis(
     ['crea_carpeta.py'],
     pathex=[],
     binaries=[],
-    datas=[('AutorizacionGrabacionYDifusion.pdf', '.'), ('AutorizacionUsoMaterialesAbierto.pdf', '.'), ('CuadroTexto.docx', '.'), ('DATOS PONENTE_NOMBRE.pdf', '.'), ('Evidencias.docx', '.'), ('FITXA ECONÒMICA.xlsx', '.'), ('FSE_Ficha_seguimiento.docx', '.'), ('Informe motivado de necesidad de ponente NO FUNCIONARIO CAST.docx', '.'), ('INSTRUCCIONES FACTURACION FACE_2025_sdgfp.pdf', '.'), ('Manual_detallado_FACe-Manual-Proveedores.pdf', '.'), ('Modelo certificado conformidad contrato menor.docx', '.'), ('Modelo informe necesidad_VAL_V3.docx', '.'), ('README.txt', '.'), ('crea_designa.exe', '.'), ('DESIGNA_PLANTILLA.docx', '.')],
+    datas=[('AutorizacionGrabacionYDifusion.pdf', '.'), ('AutorizacionUsoMaterialesAbierto.pdf', '.'), ('CuadroTexto.docx', '.'), ('DATOS PONENTE_NOMBRE.pdf', '.'), ('Evidencias.docx', '.'), ('FITXA ECONÒMICA.xlsx', '.'), ('FSE_Ficha_seguimiento.docx', '.'), ('Informe motivado de necesidad de ponente NO FUNCIONARIO CAST.docx', '.'), ('INSTRUCCIONES FACTURACION FACE_2025_sdgfp.pdf', '.'), ('Manual_detallado_FACe-Manual-Proveedores.pdf', '.'), ('Modelo certificado conformidad contrato menor.docx', '.'), ('Modelo informe necesidad_VAL_V3.docx', '.'), ('README.txt', '.'), ('crea_designa.exe', '.'), ('DESIGNA_PLANTILLA.docx', '.'), ('icon.ico', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
